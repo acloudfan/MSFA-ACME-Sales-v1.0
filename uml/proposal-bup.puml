@@ -1,0 +1,61 @@
+@startuml
+
+
+'Uncomment the following to check out the detailed view
+!include customer.class.puml
+!include vacationpackage.class.puml
+
+
+
+package com.acme.sales.model {
+
+    class Proposal <<Aggregate Root>> {
+     - int : referenceNumber
+     - int : customerReferenceNumber
+     - VacationPackage: vacationPackage
+     - array: Pax
+
+     + boolean generateBookingConfirmation()
+    }
+    note left of Proposal : Proposal is an Aggregate that holds all of the information needed for booking the vacation.
+
+    enum  ProposalStatus {
+            ACCEPTED,
+            REJECTED,
+            ON_HOLD,
+            AWAITING_CONFIRMATION,
+            EXPIRED,
+            UNKNOWN
+       }
+
+    class Customer <<Entity>> {
+    - int : referenceNumber
+    }
+
+    'Cannot exist on its own
+    class Pax <<Value Object>> {
+        - String: fname
+        - String: lname
+        - String: mname
+        - int: age
+    }
+
+    class Offer {
+     - String: reference
+    }
+}
+
+Proposal "1" o-- "1" VacationPackage : references
+
+'Composition as Customer can exist on its own
+Proposal o--  Customer : references
+
+'Aggregation relationship - Pax can't exist w/o proposal
+Proposal "1" *-- "*" Pax  : has
+
+'Aggregation relation
+Proposal "0" *-- "2" Offer
+Proposal -- ProposalStatus : defines
+
+
+@enduml

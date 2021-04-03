@@ -1,0 +1,33 @@
+@startuml
+
+package com.acme.model.repo {
+    interface BookingConfirmationRepo <<Repository>> {
+        + boolean : add(BookingConfirmation bookingConfirmation)
+        + BookingConfirmation : get(int reference)
+        + BookingConfirmation : getByCustomer(int customerReference)
+        + boolean : remove(int reference)
+    }
+    note top of BookingConfirmationRepo : This is the BookingConfirmation repository interface or standard contract
+    note right of BookingConfirmationRepo::"getByCustomer(int customerReference)"
+                A High level function for getting all Booking Confirmation for a
+                given customer reference number
+    end note
+}
+
+package com.acme.model.tests.fake.repo {
+    class BookingConfirmationRepoFake {
+        This is a concrete class that would implement the methods
+        This <b>fake implementation of repo is for unit testing</b>
+        Real implementation would connect to a Database backend
+        such as RDBMS/MySQL, PostreSQL   NoSQL/MongoDB etc
+        --
+        Exposes the Repo functions defined in the interface
+    }
+    note top of  BookingConfirmationRepoFake : Fake Booking Confirmation repo implementation for testing
+}
+
+class BookingConfirmationRepoFake implements BookingConfirmationRepo
+
+title  BookingConfirmation Repository Interface \n \n
+footer \n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml

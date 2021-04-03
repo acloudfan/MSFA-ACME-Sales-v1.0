@@ -1,0 +1,34 @@
+@startuml
+
+package com.acme.model.repo {
+    interface VacationPackageRepo <<Repository>> {
+        + boolean : add(VacationPackage vacationPackage)
+        + VacationPackage : get(String name)
+        + ArrayList<VacationPackage> : get(String destination, int numberNights)
+        + boolean : remove(String name);
+    }
+
+    note top of VacationPackageRepo : This is the Vacation Package repository interface or standard contract
+    note right of VacationPackageRepo::"get(String destination, int numberNights)"
+        This is a high level function that will pull the
+        vacation packages matching the criteria
+    end note
+}
+
+package com.acme.model.tests.fake.repo {
+    class VacationPackageRepoFake {
+        This is a concrete class that would implement the methods
+                This <b>fake implementation of repo for unit testing</b>
+                Real implementation would connect to a Database backend
+                such as RDBMS/MySQL, PostreSQL   NoSQL/MongoDB etc
+                --
+                Exposes the Repo functions defined in interface
+    }
+    note right of VacationPackageRepoFake:Fake Vacation Package repo implementation for testing
+}
+
+class VacationPackageRepoFake implements VacationPackageRepo
+
+title  Vacation Package Repository Interface \n \n
+footer \n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml

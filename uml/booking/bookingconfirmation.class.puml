@@ -1,0 +1,69 @@
+@startuml
+
+
+package com.acme.sales.model.booking {
+    class BookingConfirmation <<Aggregate Root>> {
+	        + int : reference
+	       + ArrayList<Reservation>: reseservations
+
+	       + int : referenceProposal
+
+        + PaymentConfirmation: paymentConfirmation
+
+
+
+        + getBookingConfirmationState: BookingConfirmationState()
+        + reserve()
+        + cancelReservation()
+
+    }
+
+
+    enum BookingConfirmationState {
+                PENDING_PAYMENT
+                PENDING_RESERVATION
+                RESERVATION_IN_PROGRESS
+                CONFIRMED
+                CANCELLATION_IN_PROGRESS
+                CANCELLED
+     }
+
+     abstract class Reservation <<Value Object>> {
+      }
+      note bottom of Reservation : Lifespan tied to Booking Confirmation
+}
+
+
+BookingConfirmation -- BookingConfirmationState : defines
+
+'These elements cannot exist on their own in the Sales context
+BookingConfirmation "1" *-- "*" Reservation
+
+
+package com.acme.sales.model.payment {
+    class PaymentConfirmation <<Entity>> {
+    }
+    note bottom of PaymentConfirmation : Lifesspan tied to Booking Confirmation
+}
+
+
+package com.acme.sales.model {
+    class Proposal <<Entity>> {
+    }
+}
+'Holds reference to the proposal
+BookingConfirmation "1" o-- "1" Proposal   : references
+
+
+'Uncomment the line below to see the full PaymentConfirmation model
+'!include ../payment/paymentconfirmation.class.puml
+
+
+BookingConfirmation "1" *-- "1" PaymentConfirmation  : has
+
+
+
+title Booking Confirmation Class \n\n
+footer \n\n\n\n\n\n Part of a course on Microservices \n Copyright 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+
+package com.acme.sales.model{
+  package repo{
+      package fake {
+      }
+      note  left of fake: This has classes for unit testing
+  }
+  note bottom of repo: Repository interfaces classes
+
+  package booking {
+  }
+  note bottom of booking: Hast the classes for booking
+
+  package payment {
+  }
+  note bottom of payment: Hast the interface for the payment gateway
+
+  package services {
+  }
+    note bottom of services: Hast the interface for the payment gateway
+}
+note top of com.acme.sales.model: Core model classes
+
+
+
+@enduml

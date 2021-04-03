@@ -1,0 +1,20 @@
+@startuml
+(*)  --> "check proposal for missing information"
+
+If "Proposal missing information" then
+--> [Yes] "Return the errors"
+--> (*)
+else
+--> "Calculate base price <b>Number of PAX</b> x <b>Per person price</b>"
+--> "Add the hotel surcharge"
+--> "Add the Airline and Airport surcharge"
+--> "Add the Rental Car surcharge"
+--> "Add the Resort surcharge"
+--> "Add the sales tax based on the customer's state"
+Endif
+-->(*)
+
+title \n  Proposal Pricing - Domain Service \n
+footer \n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

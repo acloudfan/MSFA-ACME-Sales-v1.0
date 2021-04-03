@@ -1,0 +1,55 @@
+@startuml
+
+package com.acme.sales.model.services {
+    interface  PaymentGateway <<Infrastructure Service>> {
+        + PaymentGatewayTransaction: processPayment(String creditCardNumber, int expiryMonth, int expiryYear, String zipCode)
+
+        + PaymentGatewayTransaction: processRefund(PaymentConfirmation paymentConfirmation)
+
+        + PaymentGatewayTransactionDetails  :  getTransactionDetails(String : gatewayReferenceCode)
+    }
+    note top of PaymentGateway : Represents an external service for credit card processing\nMay exposed as API over HTTP
+
+
+    note right of PaymentGateway::"PaymentGatewayTransaction: processPayment(String creditCardNumber, int expiryMonth, int expiryYear, String zipCode)"
+       This is the function used for payment confirmation
+       when customer payment is successful
+    end note
+    note right of PaymentGateway::"PaymentGatewayTransaction: processRefund(PaymentConfirmation paymentConfirmation)"
+       This is the function used for payment cancellation
+       can only be called  if customer has already paid
+    end note
+    note right of PaymentGateway::"PaymentGatewayTransactionDetails  :  getTransactionDetails(String : gatewayReferenceCode)"
+       Gets the details of the transaction in JSON format
+    end note
+
+
+    class PaymentGatewayTransaction <<Value Object>> {
+        + String : reference
+        + String : result             // OK | ERROR
+        + String : errorDetails   // Error details
+    }
+    note right of PaymentGatewayTransaction::"reference"
+       This is generated when the requested action is processed by the external service
+       The generated reference may be used for get the details of the transaction
+    end note
+
+    class PaymentGatewayTransactionDetails <<Value Object>> {
+        +    String : reference
+        +    String : cardHolderLastName
+        +    String : cardHolderFirstName
+        +    Date   : transactionDate
+        +    String : transactionType
+    }
+    note bottom of PaymentGatewayTransactionDetails : Holds the details of the transaction
+}
+
+
+
+PaymentGateway ..> PaymentGatewayTransaction : "creates"
+PaymentGateway ..> PaymentGatewayTransactionDetails : "creates"
+
+Title Payment Gateway - Infrastructure Service  \n\n
+footer \n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml
+

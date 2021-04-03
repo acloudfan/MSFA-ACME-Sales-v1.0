@@ -1,0 +1,33 @@
+@startuml
+
+package com.acme.model.repo {
+    interface ProposalRepo <<Repository>> {
+        + boolean : add(Proposal proposal)
+        + Proposal : get(int reference)
+        + ArrayList<Proposal> : getCustomerProposals(int customerReference)
+        + boolean : remove(int reference)
+    }
+    note top of ProposalRepo : This is the Proposal repository interface or standard contract
+    note right of ProposalRepo::"ArrayList<Proposal> : getCustomerProposals(int customerReference)"
+                A High level function for getting all Proposals for a
+                given customer reference number
+    end note
+}
+
+package com.acme.model.tests.fake.repo {
+    class ProposalRepoFake {
+        This is a concrete class that would implement the methods
+        This <b>fake implementation of repo is for unit testing</b>
+        Real implementation would connect to a Database backend
+        such as RDBMS/MySQL, PostreSQL   NoSQL/MongoDB etc
+        --
+        Exposes the Repo functions defined in the interface
+    }
+    note top of  ProposalRepoFake : Fake Proposal repo implementation for testing
+}
+
+class ProposalRepoFake implements ProposalRepo
+
+title  Proposal Repository Interface \n \n
+footer \n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml

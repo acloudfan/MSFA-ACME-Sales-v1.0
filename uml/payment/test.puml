@@ -1,0 +1,25 @@
+@startuml
+!include <awslib/AWSCommon>
+!include <awslib/AWSSimplified.puml>
+!include <awslib/Compute/all.puml>
+!include <awslib/mobile/all.puml>
+!include <awslib/general/all.puml>
+!include <awslib/GroupIcons/all.puml>
+
+ skinparam linetype polyline
+' skinparam linetype ortho
+
+package "AWS Cloud" {
+EC2(Smadex, "Smadex Service", " ")
+}
+
+Users(Users, "Users", " ")
+TraditionalServer(AdExchange, "Ad Exchange", " ")
+Mobile(Mobile, "Publisher app or web", " ")
+
+Users -down-> Mobile: 1. Visits
+Mobile -right-> AdExchange: 2. Start auction
+AdExchange -right-> Smadex: 3. Bid request / response
+Smadex -left-> Mobile: 4. Show Ad
+Users -right-> Smadex: 5. Impression / click / install / event {request id}
+@enduml

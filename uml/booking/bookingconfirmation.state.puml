@@ -1,0 +1,42 @@
+@startuml
+
+[*] --> PENDING_PAYMENT  : BookingConfirmation object instance created
+
+PENDING_PAYMENT : Customer has committed to the proposal
+PENDING_PAYMENT : but has not yet  paid
+
+state Reservation {
+PENDING_RESERVATION : Customer has paid but
+PENDING_RESERVATION : reservations process has not started
+
+
+PENDING_RESERVATION -> RESERVATION_IN_PROGRESS
+RESERVATION_IN_PROGRESS : Customer has paid and reservations are in progress
+
+RESERVATION_IN_PROGRESS -> CONFIRMED
+CONFIRMED : All providers have confirmed the reservations
+
+}
+PENDING_PAYMENT --> Reservation
+CONFIRMED --> [*]   : Customer enjoys the vacation
+
+'Customer may cancel the reservation under some conditions
+CONFIRMED -> CANCELLATION_IN_PROGRESS
+
+
+state Cancellation {
+CANCELLATION_IN_PROGRESS : Customer requested cancellation
+CANCELLATION_IN_PROGRESS -> CANCELLED
+
+}
+CANCELLED : Booking was successfull cancelled
+
+PENDING_PAYMENT -> Cancellation
+CANCELLED --> [*] : Cancellation successful
+
+
+
+title  State Transition for the Booking \n \n
+footer \n\n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

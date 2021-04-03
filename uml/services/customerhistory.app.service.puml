@@ -1,0 +1,57 @@
+@startuml
+
+package com.acme.sales.model.services {
+    class  CustomerHistoryService <<Application Service>> {
+        + CustomerHistory : getCustomerHistory(int customerReference)
+        + CustomerHistory : getCustomerHistory(int customerReference, int number)
+
+        + CustomerHistory : getCustomerHistory(String email, String phoneNumber)
+        + CustomerHistory : getCustomerHistory(String email, String phoneNumber, int number)
+    }
+    note top of CustomerHistoryService : An application services that consolidates data for Customer, Proposal & Bookings.\nAn API class can wrap this class and expose it over HTTP
+    note right of CustomerHistoryService::"CustomerHistory : getCustomerHistory(int customerReference, int number)"
+        Gets the cutomer data based on <b>customer's reference number</b>
+    end note
+    note right of CustomerHistoryService::"CustomerHistory : getCustomerHistory(String email, String phoneNumber, int number)"
+        Gets the cutomer data based on <b>customer's email or phone number</b>
+    end note
+
+    class CustomerHistory <<Value Object>> {
+        + Customer                        :  customer
+        + ArrayList<Proposal>             :  proposals
+        + ArrayList<BookingConfirmation>  :  bookings
+    }
+    note right of CustomerHistory : A <b>Value Object</b> that holds the consolidated history for the customer
+}
+CustomerHistoryService ..> CustomerHistory : creates
+
+'Uses the repositories for fetching the entities
+package com.acme.sales.model.repo {
+    class CustomerRepo {}
+    class ProposalRepo {}
+    class BookingConfirmationRepo {}
+}
+CustomerHistoryService ..> CustomerRepo : Uses
+CustomerHistoryService ..> ProposalRepo : Uses
+CustomerHistoryService ..> BookingConfirmationRepo : Uses
+
+'These are the core elements of the model
+package com.acme.sales.model {
+    class Customer {}
+    class Proposal {}
+    class BookingConfirmation {}
+}
+
+CustomerHistory "1" o-- "1" Customer
+CustomerHistory "1" o-- "*" Proposal
+CustomerHistory "1" o-- "*" BookingConfirmation
+
+'!include ../customer.class.puml
+'!include ../proposal.puml
+'!include ../booking/bookingconfirmation.class.puml
+
+Title Customer History - Application Service \n\n
+footer \n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml
+
+

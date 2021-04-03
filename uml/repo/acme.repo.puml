@@ -1,0 +1,55 @@
+@startuml
+
+
+package com.acme.model.repo {
+    note "All of the Repository interface class in this package" as N1
+    interface CustomerRepo{
+    }
+    interface VacationPackageRepo{
+    }
+    interface ProposalRepo{
+    }
+    interface BookingConfirmation{
+    }
+}
+
+package com.acme.model.tests.fake.repo{
+    note "Fake Implementation of the repo interfaces for testing" as N3
+    class CustomerRepoFake{
+    }
+    class VacationPackageRepoFake{
+    }
+    class ProposalRepoFake{
+    }
+    class BookingConfirmationFake{
+    }
+}
+com.acme.model.tests.fake.repo ..|> com.acme.model.repo : implements classes
+
+
+package com.acme.model.repo.database{
+    note "Implementation of the repo interfaces for RDBMS/NoSQL" as N2
+    class CustomerRepoDB{
+    }
+    class VacationPackageRepoDB{
+    }
+    class ProposalRepoDB{
+    }
+    class BookingConfirmationDB{
+    }
+}
+com.acme.model.repo.database ..|> com.acme.model.repo : implements classes
+
+
+'Uncomment the following to see blown up view of the repo related interfaces
+
+'!include customer.interface.puml
+'!include vacationpackage.interface.puml
+'!include proposal.interface.puml
+'!include bookingconfirmation.interface.puml
+
+title Repository objects \n\n
+footer \n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+
+
+@enduml

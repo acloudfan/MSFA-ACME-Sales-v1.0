@@ -1,0 +1,39 @@
+@startuml
+
+package com.acme.model.repo {
+    interface CustomerRepo <<Repository>> {
+        + boolean : add(Customer customer)
+        + Customer : get(int reference)
+
+        + Customer : get(String email, String phoneNumber)
+
+        + boolean : remove(int  reference)
+    }
+    note top of CustomerRepo : This is the Customer repository interface or standard contract
+
+    note right of CustomerRepo::"Customer : get(String email, String phoneNumber)"
+            A High level function for finding a customer that
+            has a matching Email address OR Phone number
+    end note
+
+}
+
+package com.acme.model.tests.fake.repo {
+    class CustomerRepoFake {
+        This is a concrete class that would implement the methods
+        This <b>fake implementation of repo for unit testing</b>
+        Real implementation would connect to a Database backend
+        such as RDBMS/MySQL, PostreSQL   NoSQL/MongoDB etc
+        --
+        Exposes the Repo functions defined in interface
+    }
+    note top of  CustomerRepoFake : Fake Customer repo implementation for testing
+
+}
+
+class CustomerRepoFake implements CustomerRepo
+
+
+title  Customer Repository Interface \n \n
+footer \n\n\n \n\n\n\n
+@enduml
