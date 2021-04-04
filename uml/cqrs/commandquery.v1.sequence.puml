@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+actor      Sales
+boundary   TaskUI
+control    CreateProposalCommand
+control    ProposalQuery
+database   proposals
+
+autonumber
+group Command
+    Sales --> TaskUI : create proposal
+    TaskUI --> CreateProposalCommand : process
+    CreateProposalCommand --> proposals : SQL Insert
+end
+
+autonumber
+group Query
+    Sales --> TaskUI : query proposal
+    TaskUI --> ProposalQuery : query
+    ProposalQuery --> proposals : SQL Select
+    proposals --> ProposalQuery : Query result JSON
+
+    ProposalQuery --> TaskUI :  Query result JSON
+end
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+boundary   TaskUI
+control    CreateProposalCommand
+database   WriteSideDB
+control    EventProcessor
+queue      messaging
+control    MesageSubscriber
+database   ReadSideDB
+
+'Invokation of the command
+== Event Creation ==
+autonumber
+group Command
+    TaskUI -> CreateProposalCommand : create proposal
+    group Local Database Transaction
+        CreateProposalCommand -> WriteSideDB : Insert proposal to DB
+        CreateProposalCommand -> WriteSideDB : Insert proposal event to DB
+    end
+end
+
+'Publishing of the event
+== Event Publishing ==
+autonumber 1
+group Message Publish
+    EventProcessor -> WriteSideDB : Select un published events
+    group Loop through events
+        EventProcessor -> messaging : publish event
+        EventProcessor -> WriteSideDB : update event status to published
+    end
+end
+
+'Subscribe to the events
+== Event Subscription ==
+autonumber 1
+group Message Subscription
+    MesageSubscriber /- messaging : subscribe to events
+    MesageSubscriber -> ReadSideDB : event guid exist
+
+    alt Check if event already in ReadSideDB
+        group Duplicate Message - Just Ignore
+        end
+    else Event doesn't already exist
+        MesageSubscriber -> ReadSideDB : add evet to eventstore
+        MesageSubscriber -> ReadSideDB : add processed event
+    end
+end
+
+@enduml

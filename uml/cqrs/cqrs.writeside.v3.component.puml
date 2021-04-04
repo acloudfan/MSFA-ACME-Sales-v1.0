@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+'top to bottom direction
+package "Application-Writer" {
+  [Command-UI]
+}
+
+
+
+left to right direction
+node "Command" {
+  CommandInterface - [Command processor]
+  [Command-UI] --> CommandInterface : HTTP/Post/Delete/Put
+}
+
+
+
+database "Write-Optimized" {
+    frame "Write" {
+       [Command Model]
+    }
+}
+[Command processor] --> [Command Model] : writes
+
+
+node "Processor" {
+    [Events Processor]
+    note bottom of [Events Processor]
+        Standalone process that on periodic
+        basis reads the proposals events table
+        if it finds events publishes it and then
+        marks the event published.
+    end note
+}
+Processor --> [Command Model] : reads events and processes
+
+node "Messaging" {
+    [AMQP]
+}
+Processor --> [AMQP] : publishes
+
+
+
+Title  Reliable Messaging - Write Components \n\n\n
+footer \n\n Part of a course on Microservices \n Copyright 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

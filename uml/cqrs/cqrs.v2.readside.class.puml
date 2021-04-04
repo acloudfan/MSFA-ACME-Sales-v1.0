@@ -1,0 +1,61 @@
+@startuml
+
+top to bottom direction
+package com.acme.infra.mongodb {
+    class MongoDBBase {
+        + executeInsert(String : Collection, String : json)
+        + find(String : Collection, Bson : filter)
+    }
+}
+
+package com.acme.sales.model.cqrs.v2.repomongo {
+    class ProposalReaderRepo
+    note top of ProposalReaderRepo
+        Connects to MongoDB
+        Does NOT Implement the Write Model
+        ProposalRepo interface
+    end note
+}
+ProposalReaderRepo --|> MongoDBBase : extends
+
+'Subscriber classes
+package com.acme.sales.model.cqrs.v2.query {
+    class ProposalSubscriber
+    note top of ProposalSubscriber
+        Subscribes to events published
+        by Command. Think of it as ACL that
+        keeps Readside independent of WRITE side
+        models
+    end note
+}
+ProposalSubscriber --> ProposalReaderRepo : uses (add proposal)
+
+package  com.acme.infra.rabbitmq{
+    class PubSubService
+}
+ProposalSubscriber --> PubSubService : uses (subscribe)
+
+'Test class for subscriber
+package com.acme.sales.model.tests.cqrs.v2 {
+    class TestSubscriber
+    note top of TestSubscriber
+        Launches the Subscriber
+        that runs as an independent process
+    end note
+    TestSubscriber--> ProposalSubscriber : uses
+}
+
+'Query class
+package com.acme.sales.model.cqrs.v2.query {
+    class ProposalQuery
+}
+ProposalQuery --> ProposalReaderRepo : uses (find)
+
+
+'Test class for Queries
+package com.acme.sales.model.tests.cqrs.v2 {
+    class TestQuery
+    TestQuery--> ProposalQuery : uses
+}
+
+@enduml

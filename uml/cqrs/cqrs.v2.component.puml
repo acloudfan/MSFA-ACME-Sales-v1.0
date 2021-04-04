@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+top to bottom direction
+package "Application-Writer" {
+  [Command-UI]
+}
+
+
+
+top to bottom direction
+node "Command" {
+  CommandInterface - [Command processor]
+  [Command-UI] --> CommandInterface : HTTP/Post/Delete/Put
+}
+
+
+
+database "Write-Optimized" {
+    frame "Write" {
+       [Command Model]
+    }
+}
+[Command processor] --> [Command Model]
+note right of Write
+    Datbase Engine & Model optimized for writes
+end note
+
+
+'-----
+
+package "Application-Reader" {
+  [Query-UI]
+}
+
+node "Query" {
+  QueryInterface - [Query processor]
+  [Query-UI] --> QueryInterface : HTTP/Get
+}
+
+database "Read-Optimized" {
+    frame "Read" {
+      [Query Model]
+    }
+}
+note bottom of Read
+    Datbase Engine & Model optimized for queries
+end note
+
+[Query processor] --> [Query Model]
+
+
+frame "Data Replication Technology" {
+    [Replicator]
+}
+
+[Command Model] ..> [Replicator] : Replicates the data
+note right of [Replicator]
+    This component replicates the data from the source  database
+    to the target database(s)
+    E.g., DB Read Replication
+    E.g., CDC BinLog Replication
+    E.g., Event based Replication
+end note
+
+
+
+[Replicator] ..> [Query Model]
+
+
+
+@enduml

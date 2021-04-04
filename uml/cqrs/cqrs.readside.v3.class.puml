@@ -1,0 +1,33 @@
+@startuml
+
+
+'Repo update for proposalevents collection
+package com.acme.sales.model.cqrs.v3.repomongo {
+    class ProposalReaderRepo  {
+        + Boolean : eventGUIDExists(String : eventGuid)
+    }
+
+    note left of ProposalReaderRepo::"eventGUIDExists(String : eventGuid)"
+        Checks if the event GUID already exist in
+        the colllection:   <b>proposalevents</b>
+    end note
+}
+ProposalReaderRepo --|> com.acme.sales.model.cqrs.v2.repomongo.ProposalReaderRepo : extends
+
+'Subscriber implementation class
+package com.acme.sales.model.cqrs.v3.query{
+    class ProposalSubscriber {
+      # handler(String : message)
+    }
+    note left of ProposalSubscriber
+        1. Checks if event already exists
+        2. If NOT exist only then process otherwise ignore
+    end note
+}
+ProposalSubscriber --|> com.acme.sales.model.cqrs.v2.query.ProposalSubscriber  : extends
+
+ProposalSubscriber --> ProposalReaderRepo : uses
+
+
+
+@enduml

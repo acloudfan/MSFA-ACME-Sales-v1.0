@@ -1,0 +1,40 @@
+@startuml
+
+package com.acme.sales.model.cqrs.v3.command {
+    class CreateProposalCommand
+    note top of CreateProposalCommand
+        This is an extension of v2 - it inserts
+        the Proposal in PostgreSQL and writes the
+        event to the proposalsevent table instead
+        of publishing it to MQ
+    end note
+
+}
+
+package com.acme.sales.model.cqrs.v3.repojdbc {
+    class CustomerRepo {}
+    class ProposalRepo {}
+}
+
+CreateProposalCommand --> com.acme.sales.model.cqrs.v3.repojdbc : uses
+
+package com.acme.sales.model.cqrs.v3.command.events {
+    class EventsProcessor {
+        + void run()
+    }
+    note top of EventsProcessor
+        Implements the event processor - picks
+        up un processed messages from the proposalsevent
+        table; publishes & marks events as published
+    end note
+    class ProposalEvent {}
+    class ProposalEventRepo{}
+
+    EventsProcessor --> ProposalEvent : uses
+    EventsProcessor --> ProposalEventRepo : uses
+}
+
+Title  Reliable Messaging - Write side Classes \n\n\n
+footer \n\n Part of a course on Microservices \n Copyright 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

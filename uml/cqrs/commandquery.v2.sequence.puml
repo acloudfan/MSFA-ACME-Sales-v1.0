@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+actor      Sales
+boundary   TaskUI
+control    CreateProposalCommand
+control    ProposalQuery
+database   WriterProposals
+control    ProposalSubscriber
+database   ReaderProposals
+queue      messaging
+
+autonumber
+group Command
+    Sales --> TaskUI : create proposal
+    TaskUI --> CreateProposalCommand : process
+    group Unit of work
+        CreateProposalCommand --> WriterProposals : Add to DB
+        CreateProposalCommand --> messaging : Publish proposal Event
+    end
+end
+
+autonumber
+group Subscriber
+    messaging --\ ProposalSubscriber : Receive Proposal Event
+    ProposalSubscriber --> ReaderProposals : Insert | Update Proposal
+
+end
+
+
+autonumber
+group Query
+    Sales --> TaskUI : query proposal
+    TaskUI --> ProposalQuery : query
+    ProposalQuery --> ReaderProposals : Select | Find the proposals based on criteria
+    ReaderProposals --> ProposalQuery : Query result
+
+    ProposalQuery --> TaskUI :  Query results JSON
+end
+
+@enduml

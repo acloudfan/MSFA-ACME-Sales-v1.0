@@ -1,0 +1,16 @@
+@startuml
+
+left to right direction
+package com.acme.infra.mongodb {
+    abstract class MongoDBBase {
+        + executeInsert(String : Collection, String : json)
+        + find(String : Collection, Bson : filter)
+    }
+}
+
+package com.acme.sales.model.tests.repo {
+    class MongoDBRepoTest
+}
+MongoDBRepoTest --|> MongoDBBase : extends
+
+@enduml

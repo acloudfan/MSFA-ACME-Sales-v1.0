@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+top to bottom direction
+package com.acme.infra.postgresql {
+    abstract class JDBCBase
+}
+
+package com.acme.sales.model.cqrs {
+   class CommandException {
+   }
+
+   interface Command {
+     + process()
+   }
+
+   Command ..> CommandException : throws
+
+   class QueryException {
+   }
+}
+
+package com.acme.sales.model.cqrs.v1.command {
+    class CreateProposalCommand
+    note top of CreateProposalCommand
+        In this implementation each command implemented
+        as a object *but* you may implement commands as
+        operations on a single command object.
+    end note
+
+
+    CreateProposalCommand ..|> Command   : implements
+}
+
+package com.acme.sales.model.cqrs.v1.query {
+    class ProposalQuery
+
+    note right of ProposalQuery
+            This is the Query implementation that uses
+            the SAME model as the command but implemented
+            as an independent component within the same
+            unit
+    end note
+
+}
+
+'Repository implementations
+package com.acme.sales.model.cqrs.v1.repojdbc {
+    class CustomerRepo
+    CustomerRepo --|> JDBCBase : Extends
+
+    class ProposalRepo
+    ProposalRepo --|> JDBCBase : Extends
+}
+
+ProposalQuery --> com.acme.sales.model.cqrs.v1.repojdbc : uses
+CreateProposalCommand  --> com.acme.sales.model.cqrs.v1.repojdbc : uses
+
+
+package com.acme.sales.model.tests.cqrs.v1 {
+    class TestCommand
+    class TestQuery
+
+    TestCommand --> CreateProposalCommand
+    TestQuery --> ProposalQuery
+}
+
+
+title \n  Proposal CQS Classes \n
+footer \n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

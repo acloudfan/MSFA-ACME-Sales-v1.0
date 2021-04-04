@@ -1,0 +1,36 @@
+@startuml
+
+
+package com.acme.sales.model.cqrs.v1.command {
+    class com.acme.sales.model.cqrs.v1.command.CreateProposalCommand
+}
+
+package com.acme.sales.model.cqrs.v2.command {
+    class CreateProposalCommand
+    note top of CreateProposalCommand
+        This is an extension of v1 - it inserts
+        the Proposal in PostgreSQL and publishes
+        an event to the proposal.update topic
+    end note
+
+}
+
+package  com.acme.infra.rabbitmq{
+    class PubSubService
+}
+CreateProposalCommand --> PubSubService : uses
+
+
+package com.acme.sales.model.tests.cqrs.v2 {
+    class TestCommand
+
+    TestCommand --> CreateProposalCommand
+}
+
+
+CreateProposalCommand --|> com.acme.sales.model.cqrs.v1.command.CreateProposalCommand : extends
+
+'READ Side
+
+
+@enduml
