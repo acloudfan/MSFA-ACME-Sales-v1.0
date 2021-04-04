@@ -1,5 +1,5 @@
 ## Microservices for Architects
-#### A course by Raj
+#### A course by Raj   raj@acloudfan.com
 #### Release date: May 1st, 2021
 
 **Branch:** Tactical
@@ -33,6 +33,9 @@ com.acme.sales.model.tests
 * /uml/repo/customer.interface.puml
 
 
-#### Main JAVA Classes
+#### Main JAVA Classes  -  com.acme.sales.model.tests
+* Fake repositories - com.acme.sales.model.tests.fake.repo
+* Classes with main functions:
+  - RepoCollectionssTest
 
 
