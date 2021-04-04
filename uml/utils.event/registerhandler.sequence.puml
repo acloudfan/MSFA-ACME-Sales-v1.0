@@ -1,0 +1,33 @@
+@startuml
+
+autonumber
+
+control InterestedComponent
+control EventHandler
+control EventBus
+collections EventDispatcher
+
+group register
+
+    InterestedComponent -> EventHandler : create an instance (handler)
+    InterestedComponent -> EventBus : register(event name, handler)
+
+    EventBus -> EventBus : find the dispatcher for "event name"
+
+    alt dispatcher already exist
+        EventBus -> EventDispatcher : register the handler
+        EventDispatcher -> EventBus : true
+        EventBus -> InterestedComponent : true (handler registered)
+    else dispatcher not found
+        autonumber 4
+        EventBus -> EventDispatcher : create a dispatcher
+        EventBus -> EventBus : register dispatcher for "event name"
+        EventBus -> EventDispatcher : register the handler
+        EventDispatcher -> EventBus : true
+        EventBus -> InterestedComponent : true (handler registered)
+    end
+end
+
+title Event Handler Register - Sequence\n\n
+footer \n\n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml

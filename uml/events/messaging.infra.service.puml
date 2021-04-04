@@ -1,0 +1,68 @@
+@startuml
+
+top to bottom direction
+
+package com.acme.sales.model.utils.event.messaging {
+    interface MessagingService {
+        + void start()
+        + void stop()
+        ---
+        + void publish(String)
+        ---
+        + void subscribe(MessageHandler)
+    }
+    note bottom of MessagingService
+        Implemented for specific messaging systems
+        E.g., implementation for RabbitMQ, Kafka etc
+        Concrete implementation hides the details of messaging API
+    end note
+
+    interface MessageHandler {
+        + void handle(String)
+    }
+    note bottom of MessageHandler
+        Receives the messages in handle function
+    end note
+
+    class MessageException {
+    }
+    note bottom of MessageException
+        Exceptions thrown from messaging function
+        Wraps the actual messaging system exception
+    end note
+}
+MessagingService --> MessageHandler : uses for subscription
+MessagingService --> MessageException : throws
+
+
+package com.acme.infra.rabbitmq {
+    class PubSubService {
+        + void start()
+        + void stop()
+        ---
+        + void publish(String)
+        ---
+        + void subscribe(MessageHandler)
+    }
+    note bottom of PubSubService
+        Exceptions thrown from messaging function
+        Wraps the actual messaging system exception
+    end note
+
+    class PubSubServiceTest {
+        + void main(..)
+    }
+    note top of PubSubServiceTest
+        Demonstrate the publish-subscribe for RabbitMQ implementation
+    end note
+}
+PubSubService --|> MessagingService : implements
+PubSubServiceTest --> PubSubService : uses
+
+
+Title   Messaging - Infrastructure Service \n\n
+footer \n\n Part of a course on Microservices \n Copyright 2021. For more info visit http://ACloudFan.com \n
+
+@enduml
+
+

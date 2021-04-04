@@ -1,0 +1,38 @@
+@startuml
+
+autonumber
+
+entity  AggregateRoot
+AggregateRoot -> Event : create an instance of event
+
+control EventBus
+collections EventDispatcher
+control EventHandler
+
+group raise event
+
+
+    AggregateRoot -> EventBus : raise(Event)
+
+
+    EventBus -> EventBus : find the dispatcher for "event name"
+
+    alt dispatcher not found
+        EventBus -> AggregateRoot : return false (no action taken)
+    else dispatcher found
+        autonumber 4
+        EventBus -> EventDispatcher : dispatch(Event)
+        loop number-of-handler times
+            EventDispatcher -> EventHandler : handle(Event)
+        end
+        EventDispatcher -> EventBus : return true
+        EventBus -> AggregateRoot : return true (at least one handler processed)
+
+    end
+end
+
+
+title  Raise Event Sequence \n\n\n\n
+footer \n\n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+
+top to bottom direction
+node "Sales Microservice\n" {
+    [PaymentAudit] --> [PaymentReceived] : Raises PaymentReceived <b>Domain Event</b>
+
+note left of [PaymentReceived] : Handler updates the Booking confirmation status to\n + CONFIRMED\n + Raises the event <b>BookingConfirmed</b>
+}
+
+
+
+database "Persistent Storage" {
+    folder "Booking Confirmation"
+
+    folder "Payment Audit"
+    [PaymentReceived] -> [Booking Confirmation]
+    [PaymentAudit] --> [Payment Audit]
+}
+
+
+node "Messaging Backbone\n" {
+ AMQP - [Topic : acme/sales/BookingConfirmed]
+ [PaymentReceived] --> [AMQP] : raise <b>BookingConfirmed</b> event
+}
+
+node "Notification\n" {
+    [Topic : acme/sales/BookingConfirmed] ..> [Email Sender]
+
+note bottom of [Email Sender] : Sends Email to the customer \n using details in the event
+}
+
+node "Marketing\n" {
+    [Topic : acme/sales/BookingConfirmed] ..> [Analytics Service]: event message
+}
+
+node "Product Management\n" {
+    [Topic : acme/sales/BookingConfirmed] ..> [Product Inventory Service]
+}
+
+node "Partner Management\n" {
+    [Topic : acme/sales/BookingConfirmed] ..> [Partner Services]
+}
+
+
+
+'Title ACME Microservices Events
+@enduml

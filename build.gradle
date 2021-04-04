@@ -12,6 +12,8 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation 'com.rabbitmq:amqp-client:5.10.0'
+    implementation 'org.slf4j:slf4j-simple:1.7.21'
 }
 
 test {

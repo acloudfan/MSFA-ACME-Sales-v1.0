@@ -1,0 +1,65 @@
+@startuml
+
+left to right direction
+
+package com.acme.sales.model.utils.event {
+abstract class Event <<Value Object>> {
+    + String  : id
+    + String  : name
+    + Object  : payload
+    + Date    : createdAt
+
+}
+note top : Represents an event object
+
+class EventBus <<Collection>> {
+    - {static} Hashtable : dispatchersMap
+
+    + {static} boolean : raise(Event event)
+
+    + {static} boolean : register(String eventName, EventHandler  handler)
+    + {static} boolean : deregister(String eventName,EventHandler  handler)
+}
+note right of EventBus
+    Represents a collection of Event Dispatchers
+    Each dispatcher is associated with 1 event (by name)
+    event-A    dispatcherCollection-A
+    event-B    dispatcherCollection-B
+    XXX          XXX
+end note
+
+note right of EventBus::"boolean : raise(Event event)"
+    Aggregate roots uses this function to raise the
+    event.
+end note
+
+class EventDispatcher <<Collection>> {
+    + boolean : register(EventHandler  handler)
+    + boolean : deregister(EventHandler  handler)
+
+    + boolean : dispatch(Event event)
+}
+note left of EventDispatcher
+    Represents a collection of Event Handlers
+    All handlers in the collection are registered for the same event
+    Dispatcher delegates the execution to the handlers
+end note
+
+top to bottom direction
+
+interface EventHandler <<Controller>> {
+    + handle(Event  event);
+}
+note left : Represents a collection of Event Dispatchers
+
+EventBus "1" -- "*" EventDispatcher : has
+EventDispatcher "1" -- "*" EventHandler : has
+EventHandler -- Event : processes >
+
+'package end
+}
+
+
+title   Domain Event Handling (static functions)\n\n\n\n
+footer \n\n\n\n\n\n Part of a course on Microservices \n Copyright @ 2021. For more info visit http://ACloudFan.com \n
+@enduml

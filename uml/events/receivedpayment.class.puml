@@ -1,0 +1,46 @@
+@startuml
+
+package com.acme.sales.model.utils.event {
+
+    interface EventHandler {
+    }
+
+    abstract  Event {
+    }
+
+}
+
+package com.acme.sales.model.booking {
+    class PaymentReceived <<Event Handler>> {
+        + boolean  handle(Event)
+    }
+}
+
+package com.acme.sales.model.payment {
+    class PaymentAudit <<Entity>> {
+        + boolean  handle(Event)
+    }
+
+    class com.acme.sales.model.payment.PaymentReceived <<Event>> {
+    }
+}
+
+package com.acme.sales.model.repo {
+    interface PaymentAuditRepo <<repository>> {
+        + PaymentConfirmation processPayment(..)
+    }
+}
+PaymentAudit "1" o-- "1" PaymentAuditRepo : holds reference
+com.acme.sales.model.payment.PaymentReceived --|> Event
+
+
+
+PaymentReceived --|> EventHandler : implements
+
+
+'Uncomment line below to see the complete model
+'!include ../booking/bookingconfirmation.class.puml
+
+Title  PaymentReceived Handler - Class \n\n\n
+footer \n\n Part of a course on Microservices \n Copyright 2021. For more info visit http://ACloudFan.com \n
+@enduml

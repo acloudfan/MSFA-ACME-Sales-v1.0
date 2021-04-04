@@ -1,0 +1,22 @@
+@startuml
+
+control SalesSystem
+entity  BookingConfirmation
+control BookingConfirmationRepo
+control MessagingService
+control RabbitMQBroker
+collections EventSubscribers
+
+autonumber
+
+SalesSystem -> BookingConfirmationRepo : setupMessagingService(..)
+BookingConfirmation -> BookingConfirmationRepo : Update status = CONFIRMED
+BookingConfirmationRepo -> MessagingService : publish(BookingConfirmed)
+MessagingService -> RabbitMQBroker : publish(BookingConfirmed)
+
+RabbitMQBroker --> EventSubscribers : BookingConfirmed Event
+EventSubscribers -> EventSubscribers : Processing
+
+'Title BookingConfirmed Event - Sequence
+
+@enduml
