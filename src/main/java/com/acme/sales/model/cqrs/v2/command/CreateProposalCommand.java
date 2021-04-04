@@ -15,7 +15,7 @@ public class CreateProposalCommand extends com.acme.sales.model.cqrs.v1.command.
      * 1. UPDATE the URL for RabbitMQ
      * 2. Ensure that the Exchange, Topic & Queue are in place
      */
-        public final String AMQP_URL ="provide the AMQP URL";
+        public final String AMQP_URL ="SET THIS UP";
 
     public final String AMQP_EXCHANGE ="acme.sales.topic";
     public final String AMQP_TOPIC = "proposal.update";

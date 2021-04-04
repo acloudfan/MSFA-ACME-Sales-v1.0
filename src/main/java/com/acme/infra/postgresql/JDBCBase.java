@@ -27,7 +27,7 @@ abstract public class JDBCBase {
     protected final static String JDBC_HOST="ziggy.db.elephantsql.com";
     protected final static String JDBC_PORT="5432";
     protected final static String JDBC_USER="zuzyxits";
-    protected final static String JDBC_PASSWORD="1EvNtOtnUM_uj4OMgzwDa0mXT-ag5WUf";
+    protected final static String JDBC_PASSWORD="MUST SETUP";
 
     // Name of the default DB is the same as the user - you need to change it for local DB
     protected final static String JDBC_DB= JDBC_USER;

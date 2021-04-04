@@ -71,7 +71,7 @@ public class ProposalReaderRepo extends MongoDBBase {
      */
     public String getProposalsForCustomer(int customerId){
 
-        String json ="{customer_id: "+customerId+", proposals: []]}";
+        String json ="{customer_id: "+customerId+", proposals: []}";
 
         Bson bson =  Filters.eq("customer_id",customerId);
 
