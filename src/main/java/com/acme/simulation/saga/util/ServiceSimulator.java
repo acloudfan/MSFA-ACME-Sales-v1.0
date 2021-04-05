@@ -1,4 +1,4 @@
-package com.acme.saga.util;
+package com.acme.simulation.saga.util;
 
 /**
  * Utility class

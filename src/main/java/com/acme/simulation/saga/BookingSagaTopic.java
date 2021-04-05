@@ -1,4 +1,4 @@
-package com.acme.saga;
+package com.acme.simulation.saga;
 
 import com.acme.infra.kafka.KafkaConfiguration;
 

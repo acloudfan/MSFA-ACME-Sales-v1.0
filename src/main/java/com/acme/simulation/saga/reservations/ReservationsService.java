@@ -1,4 +1,4 @@
-package com.acme.saga.reservations;
+package com.acme.simulation.saga.reservations;
 
 import com.acme.infra.kafka.ConsumerService;
 import com.acme.infra.kafka.KafkaConfiguration;

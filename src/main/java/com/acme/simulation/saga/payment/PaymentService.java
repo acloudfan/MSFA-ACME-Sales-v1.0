@@ -1,4 +1,4 @@
-package com.acme.saga.payment;
+package com.acme.simulation.saga.payment;
 
 import com.acme.infra.kafka.ConsumerService;
 import com.acme.infra.kafka.MessageHandler;

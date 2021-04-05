@@ -1,4 +1,4 @@
-package com.acme.saga.booking;
+package com.acme.simulation.saga.booking;
 
 import com.acme.infra.kafka.KafkaConfiguration;
 import com.acme.infra.kafka.MessageHandler;

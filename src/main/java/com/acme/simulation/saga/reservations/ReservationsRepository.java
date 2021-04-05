@@ -1,4 +1,4 @@
-package com.acme.saga.reservations;
+package com.acme.simulation.saga.reservations;
 
 import com.acme.infra.kafka.ProducerService;
 import com.acme.infra.mongodb.MongoDBBase;

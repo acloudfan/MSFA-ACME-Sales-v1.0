@@ -13,7 +13,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-
+    implementation 'org.slf4j:slf4j-simple:1.7.21'
+    implementation 'org.mongodb:mongodb-driver:3.12.7'
     implementation group: 'org.apache.kafka', name: 'kafka_2.13', version: '2.7.0'
 
 }
