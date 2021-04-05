@@ -74,4 +74,13 @@ is the main class for testing the v2 Command implementation. Executing this clas
 populated by the subscriber
 
 
+#### Reliable Messaging Pattern - CQRS v3
+**com.acme.sales.model.tests.cqrs.v3.TestCommand** 
+* Writes to the JDBC DB and reliably publishes a message
+* Manages the events to be published in a table
 
+
+**com.acme.sales.model.tests.cqrs.v3.TestSubscriber**
+* Receieves the message and updates DB 
+* Checks for DB
+ 
