@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package com.acme.simulation.saga {
+    interface BookingSagaEvents
+    note bottom of BookingSagaEvents : Declares the Saga events
+
+    interface BookingSagaTopic
+    note bottom of BookingSagaTopic : Declares the common topic
+
+    class RunSagaTest
+    note bottom of RunSagaTest : Starts the Saga
+}
+
+@enduml

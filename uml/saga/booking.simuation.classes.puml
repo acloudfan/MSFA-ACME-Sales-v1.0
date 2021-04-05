@@ -1,0 +1,69 @@
+@startuml
+
+top to bottom direction
+
+package com.acme.simulation.saga.booking {
+    class BookingSaga
+    note bottom of BookingSaga
+        Listens for events: EVENT_BOOKING_PAYMENT_SUCCESS
+                                   EVENT_BOOKING_PAYMENT_FAILURE
+                                   EVENT_BOOKING_RESERVATION_SUCCESS
+                                   EVENT_BOOKING_RESERVATION_FAILED
+
+    end note
+    class BookingSagaRepository
+    note bottom of BookingSagaRepository
+        Manages data in Saga state collection
+        Emits events : EVENT_BOOKING_ADDED
+                              EVENT_BOOKING_CONFIRMED
+                              EVENT_BOOKING_FAILED
+    end note
+
+    interface BookingSagaState {
+        + BOOKING_PAYMENT_PENDING
+        + BOOKING_RESERVATION_PENDING
+        + BOOKING_CONFIRMED
+        + BOOKING_FAILED
+    }
+
+    BookingSaga -> BookingSagaRepository : uses
+    BookingSagaRepository --> BookingSagaState : uses
+}
+
+package com.acme.simulation.saga.payment {
+    class PaymentService
+    note bottom of PaymentService
+        Listens for events: EVENT_BOOKING_ADDED
+                                   EVENT_BOOKING_RESERVATION_FAILED
+
+    end note
+    class PaymentRepository
+    note bottom of PaymentRepository
+        Manages data in payment collection
+        Emits events : EVENT_BOOKING_PAYMENT_SUCCESS
+                              EVENT_BOOKING_PAYMENT_FAILURE
+    end note
+
+    PaymentService -> PaymentRepository : uses
+}
+
+package com.acme.simulation.saga.reservations {
+    class ReservationsService
+    note bottom of ReservationsService
+        Listens for events: EVENT_BOOKING_PAYMENT_SUCCESS
+    end note
+    class ReservationsRepository
+    note bottom of ReservationsRepository
+        Manages data in reservations collection
+        Emits events : EVENT_BOOKING_RESERVATION_SUCCESS
+                              EVENT_BOOKING_RESERVATION_FAILURE
+    end note
+
+    ReservationsService -> ReservationsRepository : uses
+}
+
+
+
+title   ""
+footer "\n\n\n\n\n\n"
+@enduml

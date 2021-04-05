@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+'scale 350 width
+[*] --> BOOKING_PAYMENT_PENDING
+BOOKING_PAYMENT_PENDING: Booking data is added to the persistence storage with unique booking_id
+BOOKING_PAYMENT_PENDING: Emits an event: EVENT_BOOKING_ADDED
+
+BOOKING_PAYMENT_PENDING --> BOOKING_RESERVATION_PENDING : payment successful
+BOOKING_RESERVATION_PENDING: Transitions to this state when
+BOOKING_RESERVATION_PENDING: Event received: EVENT_BOOKING_PAYMENT_SUCCESS
+
+BOOKING_PAYMENT_PENDING --> BOOKING_FAILED : failure of payment
+BOOKING_FAILED: Happens when following events are received:
+BOOKING_FAILED: EVENT_BOOKING_PAYMENT_FAILED
+BOOKING_FAILED: EVENT_BOOKING_RESERVATION_FAILED
+
+'On failure in reservation
+BOOKING_RESERVATION_PENDING --> BOOKING_FAILED : Failure to reserve
+
+'Successful reservation
+BOOKING_RESERVATION_PENDING --> BOOKING_CONFIRMED : reservation succesful
+BOOKING_CONFIRMED: Booking marked confiremed when event received:
+BOOKING_CONFIRMED: EVENT_BOOKING_RESERVATION_SUCCESS
+
+BOOKING_FAILED --> [*]
+BOOKING_CONFIRMED --> [*]
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'autonumber
+
+group happy path with successfuk payment
+    BookingSagaService --\ PaymentService: EVENT_BOOKING_ADDED
+    PaymentService --> PaymentService: T2:processPayment()
+    group payment successful
+        PaymentService --\  BookingSagaService : EVENT_BOOKING_PAYMENT_SUCCESS
+        PaymentService --\ ReservationsService : EVENT_BOOKING_PAYMENT_SUCCESS
+        ReservationsService --> ReservationsService : T3:processReservations()
+    end
+
+    alt successful reservation
+        ReservationsService --\ BookingSagaService : EVENT_BOOKING_RESERVATION_SUCCESS
+        BookingSagaService --> BookingSagaService : bookingConfirmed
+        BookingSagaService --\ PaymentService : EVENT_BOOKING_CONFIRMED
+        BookingSagaService --\ ReservationsService : EVENT_BOOKING_CONFIRMED
+    else failed reservation
+        ReservationsService --> ReservationsService : C3:cleanupReservations()
+        ReservationsService --\ BookingSagaService : EVENT_BOOKING_RESERVATION_FAILURE
+        ReservationsService --\ PaymentService : EVENT_BOOKING_RESERVATION_FAILURE
+        PaymentService --> PaymentService: C2:refundPayment()
+        BookingSagaService --\ PaymentService : EVENT_BOOKING_FAILED
+            BookingSagaService --\ ReservationsService : EVENT_BOOKING_FAILED
+    end
+
+
+end
+
+@enduml

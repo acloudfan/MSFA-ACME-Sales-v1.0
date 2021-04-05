@@ -1,0 +1,18 @@
+@startuml
+
+package com.acme.simulation.saga.util {
+    class ServiceSimulator {
+        + simulate(int : successPercent)
+    }
+    note bottom of ServiceSimulator
+        Simulates the execution of a service
+
+        Delays by a random duration < 10 seconds
+
+        Takes a variable = successPercent that decides the chance of SuccessPercent
+             * successPercent = 100    Means 100% chance of success
+             * successPercent = 0      Means 0% chance of success
+    end note
+}
+
+@enduml
