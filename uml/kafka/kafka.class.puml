@@ -1,0 +1,39 @@
+@startuml
+
+package com.acme.infra.kafka {
+
+    abstract class KafkaService{
+       # setupConfiguration()
+    }
+    note right of KafkaService
+        Abstract class that has the logic for setting up
+        the properties used by the producer and consumer service
+
+        Gets the runtime config parameters form the KafkaConfiguration
+    end note
+
+    interface KafkaConfiguration {
+    }
+    note right of KafkaConfiguration
+        Holds the Kafka/Karafka configuration parameters in variable
+    end note
+
+    KafkaService --|> KafkaConfiguration : implements
+
+    class ProducerService {
+        + publish(...)
+    }
+
+    interface MessageHandler {}
+
+    ProducerService --|> KafkaService : extends
+
+
+    class ConsumerService {
+        + subscribe(...)
+    }
+    ConsumerService --|> KafkaService : extends
+    ConsumerService --> MessageHandler : delegates message processing
+}
+
+@enduml
